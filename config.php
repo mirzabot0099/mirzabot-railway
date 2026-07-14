@@ -1,22 +1,20 @@
 <?php
-// This variable added for high load panels which their response time is long and bot can't communicate with online panel!
-// null for default settings
 $request_exec_timeout = null;
 
 // ==================== تنظیمات دیتابیس ====================
 $dbhost = 'localhost';
 $dbname = 'mirzabot';
 $usernamedb = 'mirza';
-$passworddb = getenv('DB_PASSWORD'); // رمز رو از محیط می‌خونه
+$passworddb = getenv('DB_PASSWORD');
 
 $options = [
     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
     PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
     PDO::ATTR_EMULATE_PREPARES => false,
-    PDO::MYSQL_ATTR_INIT_COMMAND => "SET NAMES utf8mb4 COLLATE utf8mb4_unicode_ci",
 ];
 
 $dsn = "mysql:host=$dbhost;dbname=$dbname;charset=utf8mb4";
+
 try {
     $pdo = new PDO($dsn, $usernamedb, $passworddb, $options);
 } catch (\PDOException $e) {
@@ -25,12 +23,10 @@ try {
 }
 
 // ==================== تنظیمات ربات تلگرام ====================
-$APIKEY = getenv('BOT_TOKEN'); // توکن از محیط
-$adminnumber = getenv('ADMIN_ID'); // آیدی ادمین از محیط
+$APIKEY = getenv('BOT_TOKEN');
+$adminnumber = getenv('ADMIN_ID');
 
 // ==================== تنظیمات دامنه و وب‌هوک ====================
-// این رو بعد از گرفتن دامنه از Railway عوض کن
-$domainhosts = 'https://quiet-river-3ec7.dfvgdrfvgerr3.workers.dev'; // بدون اسلش آخر
-$usernamebot = 'Evegeve_bot'; // اسم رباتت بدون @
-
+$domainhosts = 'https://mirzabot-railway-production.up.railway.app';
+$usernamebot = 'YourBotUsername';
 ?>
