@@ -1,9 +1,7 @@
 cat > /app/config.php << 'EOF'
 <?php
-// ==================== تنظیمات SQLite ====================
 $db = new SQLite3('/app/database.sqlite');
 
-// ایجاد جدول کاربران
 $db->exec("CREATE TABLE IF NOT EXISTS users (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     telegram_id TEXT UNIQUE,
@@ -13,7 +11,6 @@ $db->exec("CREATE TABLE IF NOT EXISTS users (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 )");
 
-// ایجاد جدول کانفیگ‌ها
 $db->exec("CREATE TABLE IF NOT EXISTS configs (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     user_id INTEGER,
@@ -22,24 +19,20 @@ $db->exec("CREATE TABLE IF NOT EXISTS configs (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 )");
 
-// ایجاد جدول تنظیمات
 $db->exec("CREATE TABLE IF NOT EXISTS settings (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     setting_key TEXT UNIQUE,
     setting_value TEXT
 )");
 
-// تنظیمات اولیه
 $db->exec("INSERT OR IGNORE INTO settings (setting_key, setting_value) VALUES ('bot_name', 'MirzaBot')");
 $db->exec("INSERT OR IGNORE INTO settings (setting_key, setting_value) VALUES ('start_message', 'به ربات میرزا خوش آمدید!')");
 
-// ==================== تنظیمات ربات تلگرام ====================
 $APIKEY = '8681272669:AAEeMHPNFldsBFFaP9RIBu3294bVnLarG58';
 $adminnumber = '123456789';
 $domainhosts = 'https://mirzabot-railway-production.up.railway.app';
 $usernamebot = 'Evegeve_bot';
 
-// تابع کمکی برای اجرای کوئری‌ها
 function db_query($sql, $params = []) {
     global $db;
     $stmt = $db->prepare($sql);
