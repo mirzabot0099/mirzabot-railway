@@ -1,33 +1,59 @@
+cat > /app/config.php << 'EOF'
 <?php
-$request_exec_timeout = null;
+// ==================== تنظیمات SQLite ====================
+$db = new SQLite3('/app/database.sqlite');
 
-// ==================== تنظیمات دیتابیس ====================
-$dbhost = 'localhost';
-$dbname = 'mirzabot';
-$usernamedb = 'mirza';
-// اگر متغیر محیطی وجود نداشت، از رمز پیش‌فرض استفاده کن
-$passworddb = getenv('DB_PASSWORD') ?: 'hossein';
+// ایجاد جدول کاربران
+$db->exec("CREATE TABLE IF NOT EXISTS users (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    telegram_id TEXT UNIQUE,
+    username TEXT,
+    first_name TEXT,
+    last_name TEXT,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+)");
 
-$options = [
-    PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-    PDO::ATTR_EMULATE_PREPARES => false,
-];
+// ایجاد جدول کانفیگ‌ها
+$db->exec("CREATE TABLE IF NOT EXISTS configs (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    user_id INTEGER,
+    config_data TEXT,
+    status TEXT DEFAULT 'active',
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP
+)");
 
-$dsn = "mysql:host=$dbhost;dbname=$dbname;charset=utf8mb4";
+// ایجاد جدول تنظیمات
+$db->exec("CREATE TABLE IF NOT EXISTS settings (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    setting_key TEXT UNIQUE,
+    setting_value TEXT
+)");
 
-try {
-    $pdo = new PDO($dsn, $usernamedb, $passworddb, $options);
-} catch (\PDOException $e) {
-    error_log("Database connection failed: " . $e->getMessage());
-    die("error: database connection failed");
-}
+// تنظیمات اولیه
+$db->exec("INSERT OR IGNORE INTO settings (setting_key, setting_value) VALUES ('bot_name', 'MirzaBot')");
+$db->exec("INSERT OR IGNORE INTO settings (setting_key, setting_value) VALUES ('start_message', 'به ربات میرزا خوش آمدید!')");
 
 // ==================== تنظیمات ربات تلگرام ====================
-$APIKEY = getenv('BOT_TOKEN');
-$adminnumber = getenv('ADMIN_ID');
-
-// ==================== تنظیمات دامنه و وب‌هوک ====================
+$APIKEY = '8681272669:AAEeMHPNFldsBFFaP9RIBu3294bVnLarG58';
+$adminnumber = '123456789';
 $domainhosts = 'https://mirzabot-railway-production.up.railway.app';
-$usernamebot = 'YourBotUsername';
+$usernamebot = 'Evegeve_bot';
+
+// تابع کمکی برای اجرای کوئری‌ها
+function db_query($sql, $params = []) {
+    global $db;
+    $stmt = $db->prepare($sql);
+    if ($stmt === false) {
+        throw new Exception("SQL Error: " . $db->lastErrorMsg());
+    }
+    foreach ($params as $key => $value) {
+        $stmt->bindValue($key, $value);
+    }
+    $result = $stmt->execute();
+    if ($result === false) {
+        throw new Exception("Query Error: " . $db->lastErrorMsg());
+    }
+    return $result;
+}
 ?>
+EOF
