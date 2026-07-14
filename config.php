@@ -30,7 +30,7 @@ $adminnumber = getenv('ADMIN_ID'); // آیدی ادمین از محیط
 
 // ==================== تنظیمات دامنه و وب‌هوک ====================
 // این رو بعد از گرفتن دامنه از Railway عوض کن
-$domainhosts = 'https://mirzabot-railway-production.up.railway.app'; // بدون اسلش آخر
+$domainhosts = 'https://quiet-river-3ec7.dfvgdrfvgerr3.workers.dev'; // بدون اسلش آخر
 $usernamebot = 'Evegeve_bot'; // اسم رباتت بدون @
 
 ?>
