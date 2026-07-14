@@ -13,4 +13,4 @@ if [ -f /var/www/html/database.sql ]; then
 fi
 
 cd /var/www/html
-php -S 0.0.0.0:3000
+php -S 0.0.0.0:8080
