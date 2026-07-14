@@ -1,4 +1,4 @@
-FROM php:8.2
+FROM php:8.2-cli
 
 RUN apt-get update && apt-get install -y \
     default-mysql-server \
@@ -6,11 +6,7 @@ RUN apt-get update && apt-get install -y \
 
 RUN docker-php-ext-install pdo_mysql mysqli
 
-COPY . /var/www/html/
+COPY . /app/
+WORKDIR /app
 
-COPY start.sh /start.sh
-RUN chmod +x /start.sh
-
-WORKDIR /var/www/html
-
-CMD ["/start.sh"]
+CMD service mysql start && php -S 0.0.0.0:8080 -t /app
