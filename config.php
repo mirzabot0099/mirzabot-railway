@@ -5,7 +5,8 @@ $request_exec_timeout = null;
 $dbhost = 'localhost';
 $dbname = 'mirzabot';
 $usernamedb = 'mirza';
-$passworddb = getenv('DB_PASSWORD');
+// اگر متغیر محیطی وجود نداشت، از رمز پیش‌فرض استفاده کن
+$passworddb = getenv('DB_PASSWORD') ?: 'hossein';
 
 $options = [
     PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION,
